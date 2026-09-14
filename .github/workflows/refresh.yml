@@ -1,0 +1,52 @@
+name: refresh live cards
+
+on:
+  schedule:
+    - cron: "17 4 * * *"   # daily at 04:17 UTC -- off the hour, avoid the stampede
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "scripts/**"
+      - ".github/workflows/refresh.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install deps
+        run: pip install --quiet Pillow
+
+      - name: stat + repo cards (live GitHub API)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/cards.py --user Hemansh-X797 --out assets
+
+      - name: merge project data (live GitHub API)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/fetch_data.py --owner Hemansh-X797
+
+      - name: render projects panel
+        run: python3 scripts/generate_projects.py data/merged.json assets logos
+
+      - name: render skills radar
+        run: python3 scripts/radar.py -o assets
+
+      - name: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/card-*.svg assets/projects-*.svg assets/radar-*.svg data/merged.json
+          git diff --staged --quiet || git commit -m "chore: refresh live cards, projects, radar [skip ci]"
+          git push

@@ -1,0 +1,30 @@
+{
+  "comment": "repo must match the exact GitHub repo name (case-insensitive). description/language override the repo's own metadata when set; leave null to use what's on GitHub.",
+  "projects": [
+    {
+      "repo": "V.I.N.C.E.",
+      "description": "A custom operating system, built from scratch, running directly on bare metal.",
+      "language": "C",
+      "tagline": "OS kernel"
+    },
+    {
+      "repo": "Aether",
+      "description": "A web browser built around speed, with a built-in adblocker that strips trackers before the page ever loads.",
+      "language": "C++",
+      "tagline": "Browser engine"
+    },
+    {
+      "repo": "Hyperion",
+      "description": "A high-performance graphics and compute engine that unlocks the GPU for heavy data workloads.",
+      "language": "C++",
+      "tagline": "GPU / compute"
+    },
+    {
+      "repo": "Pulse",
+      "description": "Palspace -- a real-time social platform with a live feed and instant chat.",
+      "language": "TypeScript",
+      "tagline": "Social platform",
+      "live_url": "https://palspace.vercel.app/hemansh"
+    }
+  ]
+}

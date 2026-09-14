@@ -1,0 +1,11 @@
+{
+  "comment": "Self-rated, 0-100. Edit these yourself -- nobody else's opinion belongs here. Order controls the radar's axis order.",
+  "skills": [
+    { "label": "Python",  "value": 96 },
+    { "label": "C",       "value": 94 },
+    { "label": "C++",     "value": 87 },
+    { "label": "Go",      "value": 83 },
+    { "label": "React",   "value": 81 },
+    { "label": "Java",    "value": 77 }
+  ]
+}

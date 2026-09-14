@@ -1,0 +1,49 @@
+name: rebuild hero + portrait
+
+# Manual only: the hero banner and portrait are built from a photo and
+# static bio text (see CONTENT in scripts/hero.py), not live data, so
+# there's nothing to refresh on a schedule. Run this after editing the
+# photo, the focus point, or the copy in hero.py.
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "assets/hemansh-face-source.png"
+      - "scripts/hero.py"
+      - "scripts/dotify.py"
+      - "scripts/lib/portrait.py"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: install deps
+        run: pip install --quiet Pillow
+
+      - name: render hero banner
+        run: python3 scripts/hero.py --photo assets/hemansh-face-source.png --focus 0.5,0.35 -o assets
+
+      - name: render standalone portrait
+        run: >
+          python3 scripts/dotify.py assets/hemansh-face-source.png -o assets/portrait
+          --cols 130 --square --focus 0.5,0.35 --detail 0.6 --contrast 1.35
+          --color --invert --circle --reveal --reveal-time 2.2 --reveal-fade 0.4
+
+      - name: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/hero-dark.svg assets/hero-light.svg assets/portrait.svg
+          git diff --staged --quiet || git commit -m "chore: rebuild hero banner + portrait [skip ci]"
+          git push
