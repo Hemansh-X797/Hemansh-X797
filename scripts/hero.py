@@ -262,9 +262,9 @@ CONTENT = {
     "location": "Bihar, IN",
     "status": "shipping",
     "bio": [
-        "Builds from the metal up: kernels, browsers, compute engines,",
-        "and the social platforms that run on top of them.",
-        "If it needs an OS, a runtime, or a rendering pipeline -- in scope.",
+        "Built a kernel from scratch, a browser, a GPU compute engine,",
+        "and the backend for a social app. If it's close to the metal,",
+        "I probably want to build it.",
     ],
     "stack": ["Python", "C", "C++", "Java", "React", "Go"],
     "building": "V.I.N.C.E. -- an OS kernel, from bare metal up",

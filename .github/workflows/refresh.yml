@@ -27,6 +27,16 @@ jobs:
       - name: install deps
         run: pip install --quiet Pillow
 
+      - name: skill radar (self-rated)
+        run: python3 scripts/radar.py --data data/skills.json -o assets/radar
+
+      - name: language radar (live, real byte counts)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          python3 scripts/radar.py --github Hemansh-X797 -o assets/radar-langs
+          --limit 6 --curve 0.4 --exclude "html,css,shell,makefile,dockerfile,batchfile"
+
       - name: stat + repo cards (live GitHub API)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,9 +49,6 @@ jobs:
 
       - name: render projects panel
         run: python3 scripts/generate_projects.py data/merged.json assets logos
-
-      - name: render skills radar
-        run: python3 scripts/radar.py -o assets
 
       - name: commit
         run: |
