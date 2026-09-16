@@ -63,7 +63,7 @@ of it too.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/radar-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/radar-light.svg">
-  <img src="assets/radar-dark.svg" width="400" alt="self-rated skill radar">
+  <img src="assets/radar-dark.svg" width="520" alt="self-rated skill radar">
 </picture>
 
 </td>
@@ -73,7 +73,7 @@ of it too.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/radar-langs-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/radar-langs-light.svg">
-  <img src="assets/radar-langs-dark.svg" width="400" alt="live language radar">
+  <img src="assets/radar-langs-dark.svg" width="520" alt="live language radar">
 </picture>
 
 </td>
@@ -115,12 +115,12 @@ of it too.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/card-stats-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/card-stats-light.svg">
-  <img src="assets/card-stats-dark.svg" width="480" alt="GitHub stats">
+  <img src="assets/card-stats-dark.svg" width="720" alt="GitHub stats">
 </picture>
 
 <br>
 
-<img src="assets/metrics.languages.svg" height="165" alt="most used languages">
+<img src="assets/metrics.languages.svg" width="100%" alt="most used languages">
 
 <br><br>
 

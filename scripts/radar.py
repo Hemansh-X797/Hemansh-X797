@@ -24,9 +24,9 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-W, H = 480, 500
-CX, CY = W / 2, H / 2 + 6
-R = 150
+W, H = 620, 640
+CX, CY = W / 2, H / 2 + 8
+R = 195
 RINGS = 4
 
 THEMES = {
@@ -68,8 +68,8 @@ def build(theme, axes, title):
         '</style>'
     )
     s.append(f'<rect width="{W}" height="{H}" fill="{c["bg"]}"/>')
-    s.append(f'<text x="{W/2}" y="30" text-anchor="middle" font-size="12" '
-              f'letter-spacing="3" fill="{c["muted"]}">{title}</text>')
+    s.append(f'<text x="{W/2}" y="34" text-anchor="middle" font-size="14" '
+              f'letter-spacing="4" fill="{c["muted"]}">{title}</text>')
 
     for ring in range(1, RINGS + 1):
         rr = R * ring / RINGS
@@ -89,26 +89,26 @@ def build(theme, axes, title):
         for i in range(n)
     )
     s.append(f'<polygon points="{pts_str}" fill="{c["fill"]}" stroke="{c["stroke"]}" '
-              f'stroke-width="2.5" stroke-linejoin="round" class="poly" '
+              f'stroke-width="3" stroke-linejoin="round" class="poly" '
               f'style="--len:{perim:.1f}"/>')
 
     for i, ax in enumerate(axes):
         x, y = data_pts[i]
         delay = 1.1 + i * 0.08
-        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{c["dot"]}" '
+        s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="6.5" fill="{c["dot"]}" '
                   f'class="node" style="animation-delay:{delay:.2f}s"/>')
 
-        lx, ly = point(i * step, R + 34)
+        lx, ly = point(i * step, R + 44)
         anchor = "middle"
         if math.sin(i * step) > 0.35:
             anchor = "start"
         elif math.sin(i * step) < -0.35:
             anchor = "end"
         s.append(f'<text x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anchor}" '
-                  f'font-size="13" font-weight="700" fill="{c["text"]}" class="lbl" '
+                  f'font-size="17" font-weight="700" fill="{c["text"]}" class="lbl" '
                   f'style="animation-delay:{0.9 + i * 0.05:.2f}s">{ax["label"]}</text>')
-        s.append(f'<text x="{lx:.1f}" y="{ly + 15:.1f}" text-anchor="{anchor}" '
-                  f'font-size="10" fill="{c["muted"]}" class="lbl" '
+        s.append(f'<text x="{lx:.1f}" y="{ly + 19:.1f}" text-anchor="{anchor}" '
+                  f'font-size="13" fill="{c["muted"]}" class="lbl" '
                   f'style="animation-delay:{0.95 + i * 0.05:.2f}s">{ax["value"]:g}%</text>')
 
     s.append('</svg>')

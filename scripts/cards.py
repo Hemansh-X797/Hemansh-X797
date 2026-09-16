@@ -205,32 +205,32 @@ def frame(w, h, c, body, label):
 
 def render_stats(user, stats, theme):
     c = THEMES[theme]
-    pad = 22
+    pad = 32
     tiles = [(v, k) for k, v in stats]
     cols = 3
     rows = (len(tiles) + cols - 1) // cols
-    rh, W = 46, 480
-    H = pad + 52 + (rows - 1) * rh + 17 + pad
+    rh, W = 70, 720
+    H = pad + 74 + (rows - 1) * rh + 24 + pad
     tw = (W - 2 * pad) / cols
 
     out = [
-        f'<text x="{pad}" y="{pad + 14}" font-size="15" font-weight="700" '
+        f'<text x="{pad}" y="{pad + 20}" font-size="21" font-weight="700" '
         f'fill="{c["title"]}">{esc(user)}</text>',
-        f'<text x="{W - pad}" y="{pad + 14}" font-size="11" text-anchor="end" '
-        f'fill="{c["gold"]}">live · at a glance</text>',
-        f'<line x1="{pad}" y1="{pad + 26}" x2="{W - pad}" y2="{pad + 26}" '
+        f'<text x="{W - pad}" y="{pad + 20}" font-size="14" text-anchor="end" '
+        f'fill="{c["gold"]}">live &#183; at a glance</text>',
+        f'<line x1="{pad}" y1="{pad + 36}" x2="{W - pad}" y2="{pad + 36}" '
         f'stroke="{c["border"]}"/>',
     ]
-    top = pad + 52
+    top = pad + 74
     for i, (value, label) in enumerate(tiles):
         cx = pad + (i % cols) * tw
         cy = top + (i // cols) * rh
         out.append(
-            f'<text x="{cx:.0f}" y="{cy:.0f}" font-size="23" font-weight="700" '
+            f'<text x="{cx:.0f}" y="{cy:.0f}" font-size="34" font-weight="700" '
             f'fill="{c["value"]}">{esc(value)}</text>'
         )
         out.append(
-            f'<text x="{cx:.0f}" y="{cy + 17:.0f}" font-size="10.5" '
+            f'<text x="{cx:.0f}" y="{cy + 25:.0f}" font-size="14" '
             f'fill="{c["muted"]}">{esc(label)}</text>'
         )
     return frame(W, H, c, "".join(out), f"{user} GitHub statistics")
@@ -238,44 +238,44 @@ def render_stats(user, stats, theme):
 
 def render_repo(repo, theme):
     c = THEMES[theme]
-    W, H = 420, 132
-    pad = 18
+    W, H = 620, 180
+    pad = 24
     out = []
 
-    out.append(icon(ICON_REPO, pad, pad, 15, c["gold"]))
+    out.append(icon(ICON_REPO, pad, pad + 4, 19, c["gold"]))
     out.append(
-        f'<text x="{pad + 22}" y="{pad + 12}" font-size="14.5" font-weight="700" '
+        f'<text x="{pad + 28}" y="{pad + 16}" font-size="19" font-weight="700" '
         f'fill="{c["title"]}">{esc(repo["name"])}</text>'
     )
     if repo.get("private"):
-        out.append(icon(ICON_LOCK, W - pad - 15, pad - 1, 15, c["muted"]))
+        out.append(icon(ICON_LOCK, W - pad - 18, pad, 18, c["muted"]))
 
     desc = repo.get("description") or "No description yet."
-    for i, line in enumerate(wrap(desc, 11.5, W - 2 * pad, 3)):
+    for i, line in enumerate(wrap(desc, 15.5, W - 2 * pad, 3)):
         out.append(
-            f'<text x="{pad}" y="{pad + 36 + i * 16}" font-size="11.5" '
+            f'<text x="{pad}" y="{pad + 48 + i * 22}" font-size="15" '
             f'fill="{c["text"]}">{esc(line)}</text>'
         )
 
-    fy = H - pad - 2
+    fy = H - pad
     x = pad
     if repo.get("language"):
         col = LANG_COLOR.get(repo["language"], c["muted"])
-        out.append(f'<circle cx="{x + 5}" cy="{fy - 4}" r="5" fill="{col}"/>')
+        out.append(f'<circle cx="{x + 6}" cy="{fy - 5}" r="6" fill="{col}"/>')
         out.append(
-            f'<text x="{x + 15}" y="{fy}" font-size="11" fill="{c["muted"]}">'
+            f'<text x="{x + 18}" y="{fy}" font-size="14" fill="{c["muted"]}">'
             f'{esc(repo["language"])}</text>'
         )
-        x += 15 + text_width(repo["language"], 11) + 18
+        x += 18 + text_width(repo["language"], 14) + 22
 
     for path, count in ((ICON_STAR, repo.get("stars", 0)),
                         (ICON_FORK, repo.get("forks", 0))):
-        out.append(icon(path, x, fy - 11, 12, c["muted"]))
+        out.append(icon(path, x, fy - 14, 15, c["muted"]))
         out.append(
-            f'<text x="{x + 17}" y="{fy}" font-size="11" fill="{c["muted"]}">'
+            f'<text x="{x + 21}" y="{fy}" font-size="14" fill="{c["muted"]}">'
             f'{count}</text>'
         )
-        x += 17 + text_width(str(count), 11) + 18
+        x += 21 + text_width(str(count), 14) + 22
 
     return frame(W, H, c, "".join(out), f'{repo["name"]} repository card')
 
@@ -284,23 +284,23 @@ def render_private_repo(entry, theme):
     """A card for a repo we know exists but can't read (private / not yet
     pushed) -- so the layout still shows it without inventing numbers."""
     c = THEMES[theme]
-    W, H = 420, 132
-    pad = 18
+    W, H = 620, 180
+    pad = 24
     out = [
-        icon(ICON_REPO, pad, pad, 15, c["gold"]),
-        f'<text x="{pad + 22}" y="{pad + 12}" font-size="14.5" font-weight="700" '
+        icon(ICON_REPO, pad, pad + 4, 19, c["gold"]),
+        f'<text x="{pad + 28}" y="{pad + 16}" font-size="19" font-weight="700" '
         f'fill="{c["title"]}">{esc(entry["repo"])}</text>',
-        icon(ICON_LOCK, W - pad - 15, pad - 1, 15, c["muted"]),
+        icon(ICON_LOCK, W - pad - 18, pad, 18, c["muted"]),
     ]
     desc = entry.get("description") or "Private repository."
-    for i, line in enumerate(wrap(desc, 11.5, W - 2 * pad, 3)):
+    for i, line in enumerate(wrap(desc, 15.5, W - 2 * pad, 3)):
         out.append(
-            f'<text x="{pad}" y="{pad + 36 + i * 16}" font-size="11.5" '
+            f'<text x="{pad}" y="{pad + 48 + i * 22}" font-size="15" '
             f'fill="{c["text"]}">{esc(line)}</text>'
         )
-    fy = H - pad - 2
+    fy = H - pad
     out.append(
-        f'<text x="{pad}" y="{fy}" font-size="11" fill="{c["muted"]}">'
+        f'<text x="{pad}" y="{fy}" font-size="14" fill="{c["muted"]}">'
         f'private -- numbers hidden until public</text>'
     )
     return frame(W, H, c, "".join(out), f'{entry["repo"]} repository card (private)')

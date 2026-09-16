@@ -48,7 +48,8 @@ THEMES = {
     },
 }
 
-W, H = 1200, 620
+W, H = 1400, 730
+PORTRAIT_W = 492
 
 
 def esc(s: str) -> str:
@@ -103,13 +104,13 @@ def fade_line(x, y, text, size, color, begin, dur=0.5, weight="400", anchor="sta
 
 
 def tag_pill(x, y, label, c, begin):
-    tw = len(label) * 6.4 + 16
+    tw = len(label) * 7.4 + 20
     body = (
         f'<g transform="translate({x:.1f},{y:.1f})" opacity="0">'
         f'<animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="{begin:.2f}s" fill="freeze"/>'
-        f'<rect width="{tw:.0f}" height="22" rx="11" fill="rgba(16,185,129,0.10)" '
+        f'<rect width="{tw:.0f}" height="26" rx="13" fill="rgba(16,185,129,0.10)" '
         f'stroke="{c["emerald"]}" stroke-opacity="0.4"/>'
-        f'<text x="{tw/2:.0f}" y="15" text-anchor="middle" font-size="11" '
+        f'<text x="{tw/2:.0f}" y="17.5" text-anchor="middle" font-size="13" '
         f'font-weight="600" fill="{c["ink"]}">{esc(label)}</text>'
         f'</g>'
     )
@@ -120,7 +121,7 @@ def tag_pill(x, y, label, c, begin):
 # portrait panel (mono ink, matches terminal theme rather than skin tones)
 # ----------------------------------------------------------------------- #
 
-def portrait_dots(photo, focus, panel_w, panel_h, c, cols=78):
+def portrait_dots(photo, focus, panel_w, panel_h, c, cols=92):
     fx, fy = focus
     cols_i, rows_i, lum, _ = load_grid(photo, cols, contrast=1.38, gamma=1.0,
                                        cell_aspect=1.0, square=True,
@@ -164,91 +165,91 @@ def build(theme, photo, focus, content):
     a(f'<linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">'
       f'<stop offset="0" stop-color="{c["panel"]}"/><stop offset="1" stop-color="{c["bg"]}"/>'
       f'</linearGradient>')
-    a(f'<clipPath id="winclip"><rect x="1" y="1" width="{W-2}" height="{H-2}" rx="20"/></clipPath>')
-    a(f'<clipPath id="portraitclip"><rect x="0" y="0" width="420" height="{H-92}" rx="14"/></clipPath>')
+    a(f'<clipPath id="winclip"><rect x="1" y="1" width="{W-2}" height="{H-2}" rx="24"/></clipPath>')
+    a(f'<clipPath id="portraitclip"><rect x="0" y="0" width="{PORTRAIT_W}" height="{H-108}" rx="16"/></clipPath>')
     a('</defs>')
 
     # outer glow border + shell
-    a(f'<rect x="0.75" y="0.75" width="{W-1.5}" height="{H-1.5}" rx="20" fill="none" '
+    a(f'<rect x="0.75" y="0.75" width="{W-1.5}" height="{H-1.5}" rx="24" fill="none" '
       f'stroke="url(#edge)" stroke-width="1.5" opacity="0.75"/>')
     a('<g clip-path="url(#winclip)">')
     a(f'<rect width="{W}" height="{H}" fill="url(#sheen)"/>')
 
     # title bar
-    a(f'<rect x="1" y="1" width="{W-2}" height="46" fill="{c["panel_bar"]}"/>')
-    a(f'<line x1="1" y1="47" x2="{W-1}" y2="47" stroke="{c["line"]}"/>')
+    a(f'<rect x="1" y="1" width="{W-2}" height="54" fill="{c["panel_bar"]}"/>')
+    a(f'<line x1="1" y1="55" x2="{W-1}" y2="55" stroke="{c["line"]}"/>')
     for i, col in enumerate(("#FF5F57", "#FEBC2E", "#28C840")):
-        a(f'<circle cx="{30+i*20}" cy="24" r="5.5" fill="{col}" opacity="0.9"/>')
-    a(f'<text x="{W/2}" y="28" text-anchor="middle" font-size="12" fill="{c["muted"]}">'
+        a(f'<circle cx="{36+i*24}" cy="27" r="6.5" fill="{col}" opacity="0.9"/>')
+    a(f'<text x="{W/2}" y="32" text-anchor="middle" font-size="14" fill="{c["muted"]}">'
       f'hemansh@systems:~% ./whoami.sh --live</text>')
-    a(f'<text x="{W-24}" y="28" text-anchor="end" font-size="10" letter-spacing="2" '
+    a(f'<text x="{W-28}" y="32" text-anchor="end" font-size="12" letter-spacing="2" '
       f'fill="{c["gold"]}">SYSTEMS.ARCHITECT</text>')
 
-    body_top = 47
-    pad = 30
+    body_top = 55
+    pad = 36
 
     # ---------------- left: portrait panel ----------------
-    px, py = pad, body_top + 22
-    pw, ph = 420, H - body_top - 44
+    px, py = pad, body_top + 26
+    pw, ph = PORTRAIT_W, H - body_top - 52
     a(f'<g transform="translate({px},{py})">')
-    a(f'<rect width="{pw}" height="{ph}" rx="14" fill="{c["bg"]}" stroke="{c["border"]}"/>')
-    a(f'<text x="16" y="24" font-size="10" letter-spacing="3" fill="{c["dim"]}">VISUAL.MAP</text>')
-    a(f'<line x1="16" y1="34" x2="{pw-16}" y2="34" stroke="{c["line"]}"/>')
-    a('<g clip-path="url(#portraitclip)" transform="translate(10,44)">')
-    dots, used_h = portrait_dots(photo, focus, pw - 20, ph - 60, c)
+    a(f'<rect width="{pw}" height="{ph}" rx="16" fill="{c["bg"]}" stroke="{c["border"]}"/>')
+    a(f'<text x="18" y="28" font-size="12" letter-spacing="3" fill="{c["dim"]}">VISUAL.MAP</text>')
+    a(f'<line x1="18" y1="40" x2="{pw-18}" y2="40" stroke="{c["line"]}"/>')
+    a('<g clip-path="url(#portraitclip)" transform="translate(12,52)">')
+    dots, used_h = portrait_dots(photo, focus, pw - 24, ph - 72, c)
     a(dots)
     a('</g>')
-    a(f'<text x="16" y="{ph-16}" font-size="10" fill="{c["dim"]}">'
+    a(f'<text x="18" y="{ph-19}" font-size="12" fill="{c["dim"]}">'
       f'{content["location"]} <tspan fill="{c["emerald"]}">&#8226;</tspan> {content["status"]}</text>')
     a('</g>')
 
     # ---------------- right: system info ----------------
-    rx = px + pw + 34
+    rx = px + pw + 40
     rw = W - rx - pad
-    ry = body_top + 30
-    a(f'<text x="{rx}" y="{ry}" font-size="10" letter-spacing="3" fill="{c["dim"]}">SYSTEM.INFO</text>')
-    a(f'<line x1="{rx}" y1="{ry+10}" x2="{W-pad}" y2="{ry+10}" stroke="url(#edge)" stroke-width="1" opacity="0.6"/>')
+    ry = body_top + 36
+    a(f'<text x="{rx}" y="{ry}" font-size="12" letter-spacing="3" fill="{c["dim"]}">SYSTEM.INFO</text>')
+    a(f'<line x1="{rx}" y1="{ry+12}" x2="{W-pad}" y2="{ry+12}" stroke="url(#edge)" stroke-width="1" opacity="0.6"/>')
 
-    t = ry + 58
-    name_svg, t_end = typed_text(rx, t, content["name"], 42, c["text"], begin=0.15, cps=14, weight="800", cursor=True, cursor_color=c["emerald"], char_w=0.68)
+    t = ry + 68
+    name_svg, t_end = typed_text(rx, t, content["name"], 50, c["text"], begin=0.15, cps=14, weight="800", cursor=True, cursor_color=c["emerald"], char_w=0.68)
     a(name_svg)
 
-    t2 = t + 38
-    role_svg, t2_end = typed_text(rx, t2, content["role"], 17, c["gold"], begin=t_end + 0.15, cps=32, weight="600")
+    t2 = t + 44
+    role_svg, t2_end = typed_text(rx, t2, content["role"], 20, c["gold"], begin=t_end + 0.15, cps=32, weight="600")
     a(role_svg)
 
-    y = t2 + 44
-    a(f'<text x="{rx}" y="{y}" font-size="11" fill="{c["emerald"]}" opacity="0">$ cat about.txt'
+    y = t2 + 52
+    a(f'<text x="{rx}" y="{y}" font-size="13" fill="{c["emerald"]}" opacity="0">$ cat about.txt'
       f'<animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="{t2_end+0.3:.2f}s" fill="freeze"/></text>')
-    y += 22
+    y += 26
     for i, line in enumerate(content["bio"]):
-        a(fade_line(rx, y, line, 12.5, c["muted"], t2_end + 0.5 + i * 0.35, weight="400"))
-        y += 20
+        a(fade_line(rx, y, line, 14.5, c["muted"], t2_end + 0.5 + i * 0.35, weight="400"))
+        y += 24
 
-    y += 12
+    y += 14
     stack_begin = t2_end + 0.5 + len(content["bio"]) * 0.35 + 0.3
-    a(f'<text x="{rx}" y="{y}" font-size="11" fill="{c["emerald"]}" opacity="0">$ ./stack --list'
+    a(f'<text x="{rx}" y="{y}" font-size="13" fill="{c["emerald"]}" opacity="0">$ ./stack --list'
       f'<animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="{stack_begin:.2f}s" fill="freeze"/></text>')
-    y += 16
+    y += 20
     tx = rx
-    ty = y + 14
+    ty = y + 16
     row_start = tx
     for i, tag in enumerate(content["stack"]):
         pill, tw = tag_pill(tx, ty, tag, c, stack_begin + 0.25 + i * 0.12)
         if tx + tw > rx + rw:
             tx = row_start
-            ty += 32
+            ty += 38
             pill, tw = tag_pill(tx, ty, tag, c, stack_begin + 0.25 + i * 0.12)
         a(pill)
-        tx += tw + 10
+        tx += tw + 12
 
     footer_begin = stack_begin + 0.25 + len(content["stack"]) * 0.12 + 0.4
-    fy = H - 30
-    a(f'<line x1="{rx}" y1="{fy-24}" x2="{W-pad}" y2="{fy-24}" stroke="{c["line"]}"/>')
-    a(f'<text x="{rx}" y="{fy}" font-size="11" fill="{c["dim"]}" opacity="0">building: '
+    fy = H - 36
+    a(f'<line x1="{rx}" y1="{fy-28}" x2="{W-pad}" y2="{fy-28}" stroke="{c["line"]}"/>')
+    a(f'<text x="{rx}" y="{fy}" font-size="13" fill="{c["dim"]}" opacity="0">building: '
       f'<tspan fill="{c["text"]}">{esc(content["building"])}</tspan>'
       f'<animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="{footer_begin:.2f}s" fill="freeze"/></text>')
-    a(f'<circle cx="{W-pad-6}" cy="{fy-4}" r="4" fill="{c["emerald"]}" opacity="0">'
+    a(f'<circle cx="{W-pad-7}" cy="{fy-5}" r="4.5" fill="{c["emerald"]}" opacity="0">'
       f'<animate attributeName="opacity" values="0;1;0.3;1" dur="1.8s" begin="{footer_begin:.2f}s" repeatCount="indefinite"/></circle>')
 
     a('</g>')  # winclip

@@ -46,11 +46,11 @@ THEMES = {
 
 DONUT_COLORS_KEYS = ["EMERALD", "GOLD", "EMERALD2", "MUTED"]
 
-W = 1180
-CARD_W = 578
-CARD_H = 168
-GAP = 14
-MARGIN = 5
+W = 1400
+CARD_W = 680
+CARD_H = 202
+GAP = 18
+MARGIN = 6
 FONT = "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace"
 
 ICON_LOCK = ("M4 4v2H3.25A1.25 1.25 0 002 7.25v6.5A1.25 1.25 0 003.25 15h9.5A1.25 1.25 0 "
@@ -125,7 +125,7 @@ def donut_segments(languages, cx, cy, r, begin, c):
         seg = frac * circumference
         col = c[DONUT_COLORS_KEYS[i % len(DONUT_COLORS_KEYS)]]
         out.append(
-            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{col}" stroke-width="9" '
+            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{col}" stroke-width="11" '
             f'stroke-dasharray="{seg:.2f} {circumference - seg:.2f}" '
             f'stroke-dashoffset="{-offset:.2f}" transform="rotate(-90 {cx} {cy})" opacity="0">'
             f'<animate attributeName="opacity" from="0" to="1" dur="0.01s" begin="{t:.2f}s" fill="freeze"/>'
@@ -149,18 +149,18 @@ def card(p, x, y, idx, c, logos_dir):
     a(f'<g opacity="0" transform="translate({x},{y})">')
     a(f'<animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="{begin:.2f}s" fill="freeze"/>')
 
-    a(f'<rect width="{CARD_W}" height="{CARD_H}" rx="12" fill="{c["PANEL"]}" stroke="{c["STROKE"]}">'
+    a(f'<rect width="{CARD_W}" height="{CARD_H}" rx="14" fill="{c["PANEL"]}" stroke="{c["STROKE"]}">'
       f'<animate attributeName="stroke" values="{c["STROKE_LO"]};{c["STROKE_HI"]};{c["STROKE_LO"]}" '
       f'dur="4.5s" begin="{begin + idx * 0.7:.2f}s" repeatCount="indefinite"/></rect>')
-    a(f'<rect width="{CARD_W}" height="30" rx="12" fill="{c["PANEL_BAR"]}"/>')
-    a(f'<rect y="18" width="{CARD_W}" height="12" fill="{c["PANEL_BAR"]}"/>')
-    a(f'<line x1="0" y1="30" x2="{CARD_W}" y2="30" stroke="{c["BARLINE"]}"/>')
-    a(f'<text x="16" y="19" font-size="10" fill="{c["MUTED"]}">'
+    a(f'<rect width="{CARD_W}" height="36" rx="14" fill="{c["PANEL_BAR"]}"/>')
+    a(f'<rect y="22" width="{CARD_W}" height="14" fill="{c["PANEL_BAR"]}"/>')
+    a(f'<line x1="0" y1="36" x2="{CARD_W}" y2="36" stroke="{c["BARLINE"]}"/>')
+    a(f'<text x="20" y="23" font-size="12" fill="{c["MUTED"]}">'
       f'<tspan fill="{c["GOLD"]}">&#8226;</tspan> {esc(repo)}</text>')
 
     if p.get("unavailable"):
-        s = 16 / 16
-        a(f'<g transform="translate({CARD_W - 30},{8}) scale({s:.3f})" fill="{c["MUTED"]}">'
+        s = 19 / 16
+        a(f'<g transform="translate({CARD_W - 36},{10}) scale({s:.3f})" fill="{c["MUTED"]}">'
           f'<path d="{ICON_LOCK}"/></g>')
     else:
         try:
@@ -169,77 +169,79 @@ def card(p, x, y, idx, c, logos_dir):
         except Exception:
             days = 999
         if days <= 14:
-            a(f'<circle cx="{CARD_W-16}" cy="15" r="3.5" fill="{c["EMERALD"]}">'
+            a(f'<circle cx="{CARD_W-19}" cy="18" r="4" fill="{c["EMERALD"]}">'
               f'<animate attributeName="opacity" values="1;0.25;1" dur="1.8s" repeatCount="indefinite"/></circle>')
         else:
-            a(f'<circle cx="{CARD_W-16}" cy="15" r="3.5" fill="{c["DIM"]}"/>')
+            a(f'<circle cx="{CARD_W-19}" cy="18" r="4" fill="{c["DIM"]}"/>')
 
     logo = load_logo_b64(p.get("name", ""), logos_dir)
     float_anim = (f'<animateTransform attributeName="transform" type="translate" '
-                  f'values="0 0; 0 -2.5; 0 0" dur="5s" begin="{begin + idx * 0.5:.2f}s" '
+                  f'values="0 0; 0 -3; 0 0" dur="5s" begin="{begin + idx * 0.5:.2f}s" '
                   f'repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" '
                   f'keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>')
     if logo:
-        a(f'<g>{float_anim}<image x="16" y="44" width="40" height="40" href="{logo}" '
+        a(f'<g>{float_anim}<image x="20" y="54" width="48" height="48" href="{logo}" '
           f'preserveAspectRatio="xMidYMid meet"/></g>')
     else:
         initial = esc((p.get("name") or "?")[0].upper())
-        a(f'<g>{float_anim}<rect x="16" y="44" width="40" height="40" rx="9" '
+        a(f'<g>{float_anim}<rect x="20" y="54" width="48" height="48" rx="11" '
           f'fill="{c["GOLD"]}" opacity="0.92"/>'
-          f'<text x="36" y="71" text-anchor="middle" font-size="20" font-weight="700" '
+          f'<text x="44" y="86" text-anchor="middle" font-size="24" font-weight="700" '
           f'fill="{c["MONO_TX"]}">{initial}</text></g>')
 
     name = esc(p.get("name", "unnamed"))
-    a(f'<text x="68" y="61" font-size="17" font-weight="700" fill="{c["TEXT"]}">{name}'
+    a(f'<text x="84" y="73" font-size="21" font-weight="700" fill="{c["TEXT"]}">{name}'
       f'<tspan fill="{c["EMERALD"]}">_<animate attributeName="opacity" values="1;0;1" dur="1.2s" '
       f'begin="{begin + 0.4:.2f}s" repeatCount="indefinite"/></tspan></text>')
 
-    for i, line in enumerate(wrap_text(p.get("description", "") or "", 52)):
-        a(f'<text x="68" y="{80 + i * 16}" font-size="11" fill="{c["MUTED"]}">{esc(line)}</text>')
+    for i, line in enumerate(wrap_text(p.get("description", "") or "", 44)):
+        a(f'<text x="84" y="{97 + i * 19}" font-size="13" fill="{c["MUTED"]}">{esc(line)}</text>')
 
-    tx = 68
+    tx = 84
+    ty = 143
     tags = [p["tagline"]] if p.get("tagline") else []
     if p.get("language"):
         tags.append(p["language"])
     for tag in tags[:3]:
-        tw = len(tag) * 6.6 + 14
-        a(f'<rect x="{tx}" y="118" width="{tw:.0f}" height="17" rx="8.5" '
+        tw = len(tag) * 7.4 + 18
+        a(f'<rect x="{tx}" y="{ty}" width="{tw:.0f}" height="21" rx="10.5" '
           f'fill="{c["PILL_BG"]}" stroke="{c["PILL_STROKE"]}"/>')
-        a(f'<text x="{tx + tw/2:.0f}" y="130" text-anchor="middle" font-size="9.5" '
+        a(f'<text x="{tx + tw/2:.0f}" y="{ty+14.5:.0f}" text-anchor="middle" font-size="11.5" '
           f'fill="{c["GOLD"]}">{esc(tag)}</text>')
-        tx += tw + 7
+        tx += tw + 8
 
+    sy = 185
     if p.get("unavailable"):
-        a(f'<text x="68" y="155" font-size="11" fill="{c["DIM"]}">private -- stats hidden until public</text>')
+        a(f'<text x="84" y="{sy}" font-size="13" fill="{c["DIM"]}">private -- stats hidden until public</text>')
     else:
         stars = p.get("stars", 0)
-        a(f'<text x="68" y="155" font-size="11" fill="{c["MUTED"]}">'
+        a(f'<text x="84" y="{sy}" font-size="13" fill="{c["MUTED"]}">'
           f'<tspan fill="{c["GOLD"]}">&#9733;</tspan> {stars}'
-          f'<tspan fill="{c["DIM"]}" dx="14">updated {rel_time(p.get("pushed_at"))}</tspan></text>')
+          f'<tspan fill="{c["DIM"]}" dx="16">updated {rel_time(p.get("pushed_at"))}</tspan></text>')
 
     langs = p.get("languages") or {}
     if langs and not p.get("unavailable"):
-        cx, cy, r = CARD_W - 58, CARD_H // 2 + 6, 27
+        cx, cy, r = CARD_W - 74, CARD_H // 2 + 10, 34
         segs, legend = donut_segments(langs, cx, cy, r, begin + 0.3, c)
-        a(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{c["RING_BG"]}" stroke-width="9"/>')
+        a(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{c["RING_BG"]}" stroke-width="11"/>')
         a(segs)
         top = legend[0]
-        a(f'<text x="{cx}" y="{cy+4}" text-anchor="middle" font-size="11" font-weight="700" '
+        a(f'<text x="{cx}" y="{cy+5}" text-anchor="middle" font-size="13" font-weight="700" '
           f'fill="{c["TEXT"]}">{top[1]*100:.0f}%</text>')
-        dot_x = cx - r - 92
-        text_x = dot_x + 9
-        ly = cy - 22
+        dot_x = cx - r - 120
+        text_x = dot_x + 11
+        ly = cy - 26
         for lang, frac, col in legend[:3]:
-            a(f'<circle cx="{dot_x}" cy="{ly}" r="3.5" fill="{col}"/>')
-            a(f'<text x="{text_x}" y="{ly+4}" font-size="10" fill="{c["MUTED"]}">'
+            a(f'<circle cx="{dot_x}" cy="{ly}" r="4" fill="{col}"/>')
+            a(f'<text x="{text_x}" y="{ly+5}" font-size="12" fill="{c["MUTED"]}">'
               f'{esc(lang)} {frac*100:.0f}%</text>')
-            ly += 18
+            ly += 21
     elif p.get("unavailable"):
-        cx, cy, r = CARD_W - 58, CARD_H // 2 + 6, 27
+        cx, cy, r = CARD_W - 74, CARD_H // 2 + 10, 34
         a(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{c["RING_BG"]}" '
-          f'stroke-width="9" stroke-dasharray="3 5"/>')
-        s = 20 / 16
-        a(f'<g transform="translate({cx-10},{cy-10}) scale({s:.3f})" fill="{c["DIM"]}">'
+          f'stroke-width="11" stroke-dasharray="3 6"/>')
+        s = 24 / 16
+        a(f'<g transform="translate({cx-12},{cy-12}) scale({s:.3f})" fill="{c["DIM"]}">'
           f'<path d="{ICON_LOCK}"/></g>')
 
     a('</g>')
@@ -250,7 +252,7 @@ def card(p, x, y, idx, c, logos_dir):
 def build(projects, theme, logos_dir):
     c = THEMES[theme]
     rows = math.ceil(len(projects) / 2)
-    height = 56 + rows * (CARD_H + GAP) + MARGIN
+    height = 66 + rows * (CARD_H + GAP) + MARGIN
     gid = f"acc_{theme}"
     s = []
     a = s.append
@@ -263,12 +265,12 @@ def build(projects, theme, logos_dir):
       f'<stop offset="1" stop-color="{c["EMERALD"]}"><animate attributeName="stop-color" '
       f'values="{c["EMERALD"]};{c["GOLD"]};{c["EMERALD"]}" dur="10s" repeatCount="indefinite"/></stop>'
       '</linearGradient></defs>')
-    a(f'<text x="{MARGIN+2}" y="18" font-size="11" letter-spacing="2" fill="{c["GOLD"]}">PROJECTS.LIST</text>')
-    a(f'<text x="{MARGIN+140}" y="18" font-size="10" fill="{c["DIM"]}">./projects.sh --all</text>')
-    a(f'<line x1="{MARGIN}" y1="28" x2="{W-MARGIN}" y2="28" stroke="url(#{gid})" stroke-width="1.5" opacity="0.7"/>')
+    a(f'<text x="{MARGIN+4}" y="22" font-size="14" letter-spacing="3" fill="{c["GOLD"]}">PROJECTS.LIST</text>')
+    a(f'<text x="{MARGIN+172}" y="22" font-size="12" fill="{c["DIM"]}">./projects.sh --all</text>')
+    a(f'<line x1="{MARGIN}" y1="34" x2="{W-MARGIN}" y2="34" stroke="url(#{gid})" stroke-width="2" opacity="0.7"/>')
     for i, p in enumerate(projects):
         x = MARGIN + (i % 2) * (CARD_W + GAP + 4)
-        y = 42 + (i // 2) * (CARD_H + GAP)
+        y = 52 + (i // 2) * (CARD_H + GAP)
         a(card(p, x, y, i, c, logos_dir))
     a('</svg>')
     return "".join(s)
